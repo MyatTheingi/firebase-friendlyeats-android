@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var viewModel: MainActivityViewModel
 
     private var mFirestore: FirebaseFirestore? = null
-    private val mQuery: Query? = null
+    private var mQuery: Query? = null
 
     private lateinit var mFilterDialog: FilterDialogFragment
     private lateinit var mAdapter: RestaurantAdapter
@@ -56,8 +56,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         // Initialize Firestore and the main RecyclerView
         mFirestore = FirebaseUtil.firestore
-        initRecyclerView()
 
+        // Get the 50 highest rated restaurants
+        mQuery = mFirestore!!.collection("restaurants")
+            .orderBy("avgRating", Query.Direction.DESCENDING)
+            .limit(LIMIT)
+
+        initRecyclerView()
     }
 
     private fun initRecyclerView() {
@@ -199,7 +204,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     companion object {
         private const val TAG = "MainActivity"
         private const val RC_SIGN_IN = 9001
-        private const val LIMIT = 50
+        private const val LIMIT = 50L
     }
 
     override fun onClick(v: View) {

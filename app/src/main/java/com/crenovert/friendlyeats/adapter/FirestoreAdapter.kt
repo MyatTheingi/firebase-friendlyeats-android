@@ -1,10 +1,8 @@
 package com.crenovert.friendlyeats.adapter
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 
 
 /**
@@ -18,11 +16,13 @@ import com.google.firebase.firestore.Query
  * more efficient implementation of a Firestore RecyclerView Adapter.
  */
 abstract class FirestoreAdapter<VH : RecyclerView.ViewHolder?>(private var mQuery: Query?) :
-    RecyclerView.Adapter<VH>() {
+    RecyclerView.Adapter<VH>(), EventListener<QuerySnapshot?> { // Add this "implements"
     private var mRegistration: ListenerRegistration? = null
     private val mSnapshots = ArrayList<DocumentSnapshot>()
     fun startListening() {
-        // TODO(developer): Implement
+        if (mQuery != null && mRegistration == null) {
+            mRegistration = mQuery!!.addSnapshotListener(this)
+        }
     }
 
     fun stopListening() {
@@ -57,6 +57,58 @@ abstract class FirestoreAdapter<VH : RecyclerView.ViewHolder?>(private var mQuer
 
     protected open fun onError(e: FirebaseFirestoreException?) {}
     protected open fun onDataChanged() {}
+
+    // Add this method
+     override fun onEvent(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+
+        // Handle errors
+        if (e != null) {
+            Log.w(TAG, "onEvent:error", e)
+            return
+        }
+
+        // Dispatch the event
+        for (change in value!!.documentChanges) {
+            // Snapshot of the changed document
+            val snapshot: DocumentSnapshot = change.document
+            when (change.type) {
+                DocumentChange.Type.ADDED -> {
+                    onDocumentAdded(change)
+                }
+                DocumentChange.Type.MODIFIED -> {
+                    onDocumentModified(change)
+                }
+                DocumentChange.Type.REMOVED -> {
+                    onDocumentRemoved(change)
+                }
+            }
+        }
+        onDataChanged()
+    }
+
+    protected open fun onDocumentAdded(change: DocumentChange) {
+        mSnapshots.add(change.newIndex, change.document)
+        notifyItemInserted(change.newIndex)
+    }
+
+    protected open fun onDocumentModified(change: DocumentChange) {
+        if (change.oldIndex == change.newIndex) {
+            // Item changed but remained in same position
+            mSnapshots[change.oldIndex] = change.document
+            notifyItemChanged(change.oldIndex)
+        } else {
+            // Item changed and changed position
+            mSnapshots.removeAt(change.oldIndex)
+            mSnapshots.add(change.newIndex, change.document)
+            notifyItemMoved(change.oldIndex, change.newIndex)
+        }
+    }
+
+    protected open fun onDocumentRemoved(change: DocumentChange) {
+        mSnapshots.removeAt(change.oldIndex)
+        notifyItemRemoved(change.oldIndex)
+    }
+
 
     companion object {
         private const val TAG = "Firestore Adapter"
