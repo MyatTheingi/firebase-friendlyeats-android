@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.FirebaseFirestoreException
 
 
 class RestaurantDetailActivity : AppCompatActivity(), View.OnClickListener,
@@ -26,7 +27,7 @@ class RestaurantDetailActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var mRatingAdapter: RatingAdapter
 
     private var mFirestore: FirebaseFirestore? = null
-    private var mRestaurantRef: DocumentReference? = null
+    private lateinit var mRestaurantRef: DocumentReference
     private var mRestaurantRegistration: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +40,7 @@ class RestaurantDetailActivity : AppCompatActivity(), View.OnClickListener,
 
         // Get restaurant ID from extras
         val restaurantId = intent.extras!!.getString(KEY_RESTAURANT_ID)
-            ?: throw IllegalArgumentException("Must pass extra " + KEY_RESTAURANT_ID)
+            ?: throw IllegalArgumentException("Must pass extra $KEY_RESTAURANT_ID")
 
         // Initialize Firestore
         mFirestore = FirebaseUtil.firestore
@@ -48,7 +49,7 @@ class RestaurantDetailActivity : AppCompatActivity(), View.OnClickListener,
         mRestaurantRef = mFirestore!!.collection("restaurants").document(restaurantId)
 
         // Get ratings
-        val ratingsQuery = mRestaurantRef!!
+        val ratingsQuery = mRestaurantRef
             .collection("ratings")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(50)
@@ -77,7 +78,7 @@ class RestaurantDetailActivity : AppCompatActivity(), View.OnClickListener,
     public override fun onStart() {
         super.onStart()
         mRatingAdapter.startListening()
-        mRestaurantRegistration = mRestaurantRef!!.addSnapshotListener(this)
+        mRestaurantRegistration = mRestaurantRef.addSnapshotListener(this)
     }
 
     public override fun onStop() {
@@ -91,14 +92,46 @@ class RestaurantDetailActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.restaurant_button_back ->  onBackPressed()
-            R.id.fab_show_rating_dialog -> mRatingDialog.show(supportFragmentManager, RatingDialogFragment.TAG)
+            R.id.restaurant_button_back -> onBackPressed()
+            R.id.fab_show_rating_dialog -> mRatingDialog.show(
+                supportFragmentManager,
+                RatingDialogFragment.TAG
+            )
         }
     }
 
-    private fun addRating(restaurantRef: DocumentReference?, rating: Rating): Task<Void> {
-        // TODO(developer): Implement
-        return Tasks.forException(Exception("not yet implemented"))
+
+    private fun addRating(
+        restaurantRef: DocumentReference,
+        rating: Rating
+    ): Task<Void?> {
+        // Create reference for new rating, for use inside the transaction
+        val ratingRef = restaurantRef.collection("ratings")
+            .document()
+
+        // In a transaction, add the new rating and update the aggregate totals
+        return mFirestore!!.runTransaction { transaction ->
+            val restaurant = transaction[restaurantRef]
+                .toObject(Restaurant::class.java)
+
+            // Compute new number of ratings
+            val newNumRatings = restaurant!!.numRatings + 1
+
+            // Compute new average rating
+            val oldRatingTotal = (restaurant.avgRating *
+                    restaurant.numRatings).toDouble()
+            val newAvgRating: Double = (oldRatingTotal + rating.rating) /
+                    newNumRatings
+
+            // Set new restaurant info
+            restaurant.numRatings = newNumRatings
+            restaurant.avgRating = newAvgRating.toFloat()
+
+            // Commit to Firestore
+            transaction[restaurantRef] = restaurant
+            transaction[ratingRef] = rating
+            null
+        }
     }
 
     /**
