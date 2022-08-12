@@ -1,0 +1,47 @@
+[debug] [2022-08-12T05:21:50.709Z] ----------------------------------------------------------------------
+[debug] [2022-08-12T05:21:50.711Z] Command:       C:\firebase-tools-instant-win.exe C:\Users\USer\.cache\firebase\tools\lib\node_modules\firebase-tools\lib\bin\firebase emulators:start
+[debug] [2022-08-12T05:21:50.712Z] CLI Version:   11.5.0
+[debug] [2022-08-12T05:21:50.712Z] Platform:      win32
+[debug] [2022-08-12T05:21:50.712Z] Node Version:  v16.16.0
+[debug] [2022-08-12T05:21:50.713Z] Time:          Fri Aug 12 2022 11:51:50 GMT+0630 (Myanmar Time)
+[debug] [2022-08-12T05:21:50.713Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-08-12T05:21:50.779Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-08-12T05:21:50.779Z] > authorizing via signed-in user (myattheingi555@gmail.com)
+[debug] [2022-08-12T05:21:50.960Z] java version "11.0.14" 2022-01-18 LTS
+
+[debug] [2022-08-12T05:21:50.961Z] Java(TM) SE Runtime Environment 18.9 (build 11.0.14+8-LTS-263)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.14+8-LTS-263, mixed mode)
+
+[debug] [2022-08-12T05:21:51.017Z] Parsed Java major version: 11
+[info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project friendly-eats-eb6aa. This may result in unexpected behavior. 
+[debug] [2022-08-12T05:21:51.049Z] [hub] writing locator at C:\Users\USer\AppData\Local\Temp\hub-friendly-eats-eb6aa.json
+[debug] [2022-08-12T05:21:51.114Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2022-08-12T05:21:51.115Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-08-12T05:21:51.115Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\USer\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.14.4.jar","--host","localhost","--port",8080,"--rules","C:\\Users\\USer\\AndroidStudioProjects\\FriendlyEats\\firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\USer\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.14.4.jar\",\"--host\",\"localhost\",\"--port\",8080,\"--rules\",\"C:\\\\Users\\\\USer\\\\AndroidStudioProjects\\\\FriendlyEats\\\\firestore.rules\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2022-08-12T05:22:02.173Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-08-12T05:22:02.173Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-08-12T05:22:02.174Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\USer\\.cache\\firebase\\emulators\\ui-v1.8.1\\server\\server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\USer\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.8.1\\\\server\\\\server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2022-08-12T05:22:02.810Z] Web / API server started at localhost:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at localhost:4000\n"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4000                │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ localhost:9099 │ http://localhost:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ localhost:8080 │ http://localhost:4000/firestore │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

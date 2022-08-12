@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "842314060947",
+    "project_id": "friendly-eats-eb6aa",
+    "storage_bucket": "friendly-eats-eb6aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842314060947:android:e7c076024140b6474ee966",
+        "android_client_info": {
+          "package_name": "com.crenovert.friendlyeats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842314060947-0d503cs8tighba5qcv70hldh16pv9vq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWfx06M-lLUpbv3kMynDuZYpZFBvbRDZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842314060947-0d503cs8tighba5qcv70hldh16pv9vq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
