@@ -133,8 +133,36 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     override fun onFilter(filters: Filters) {
-        // TODO(developer): Construct new query
-        showTodoToast()
+        // Construct basic query
+        var query: Query = mFirestore!!.collection("restaurants")
+
+
+        // Category (equality filter)
+        if (filters.hasCategory()) {
+            query = query.whereEqualTo("category", filters.category)
+        }
+
+        // City (equality filter)
+        if (filters.hasCity()) {
+            query = query.whereEqualTo("city", filters.city)
+        }
+
+        // Price (equality filter)
+        if (filters.hasPrice()) {
+            query = query.whereEqualTo("price", filters.price)
+        }
+
+        // Sort by (orderBy with direction)
+        if (filters.hasSortBy()) {
+            query = query.orderBy(filters.sortBy!!, filters.sortDirection!!)
+        }
+
+        // Limit items
+        query = query.limit(LIMIT)
+
+        // Update the query
+        mQuery = query
+        mAdapter.setQuery(query)
 
         // Set header
         binding.textCurrentSearch.text = Html.fromHtml(filters.getSearchDescription(this))
@@ -142,6 +170,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
 
         // Save filters
         viewModel.filters = filters
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

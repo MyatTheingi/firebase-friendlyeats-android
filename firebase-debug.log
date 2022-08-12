@@ -44,3 +44,9 @@ Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.14+8-LTS-263, mixed mode)
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[info] i  firestore: Change detected, updating rules... 
+[debug] [2022-08-12T09:40:46.765Z] >>> [apiv2][query] PUT http://localhost:8080/emulator/v1/projects/friendly-eats-eb6aa:securityRules [none]
+[debug] [2022-08-12T09:40:46.765Z] >>> [apiv2][body] PUT http://localhost:8080/emulator/v1/projects/friendly-eats-eb6aa:securityRules {"ignore_errors":true,"rules":{"files":[{"name":"security.rules","content":"rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      //\n      // WARNING: These rules are insecure! We will replace them with\n      // more secure rules later in the codelab\n      //\n      allow read, write: if request.auth != null;\n    }\n  }\n}\n"}]}}
+[debug] [2022-08-12T09:40:46.937Z] <<< [apiv2][status] PUT http://localhost:8080/emulator/v1/projects/friendly-eats-eb6aa:securityRules 200
+[debug] [2022-08-12T09:40:46.937Z] <<< [apiv2][body] PUT http://localhost:8080/emulator/v1/projects/friendly-eats-eb6aa:securityRules {}
+[info] +  firestore: Rules updated. 
