@@ -1,12 +1,44 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      //
-      // WARNING: These rules are insecure! We will replace them with
-      // more secure rules later in the codelab
-      //
-      allow read, write: if request.auth != null;
+    // Determine if the value of the field "key" is the same
+    // before and after the request.
+    function isUnchanged(key) {
+      return (key in resource.data)
+        && (key in request.resource.data)
+        && (resource.data[key] == request.resource.data[key]);
+    }
+
+    // Restaurants
+    match /restaurants/{restaurantId} {
+      // Any signed-in user can read
+      allow read: if request.auth != null;
+
+      // Any signed-in user can create
+      // WARNING: this rule is for demo purposes only!
+      allow create: if request.auth != null;
+
+      // Updates are allowed if no fields are added and name is unchanged
+      allow update: if request.auth != null
+                    && (request.resource.data.keys() == resource.data.keys())
+                    && isUnchanged("name");
+
+      // Deletes are not allowed.
+      // Note: this is the default, there is no need to explicitly state this.
+      allow delete: if false;
+
+      // Ratings
+      match /ratings/{ratingId} {
+        // Any signed-in user can read
+        allow read: if request.auth != null;
+
+        // Any signed-in user can create if their uid matches the document
+        allow create: if request.auth != null
+                      && request.resource.data.userId == request.auth.uid;
+
+        // Deletes and updates are not allowed (default)
+        allow update, delete: if false;
+      }
     }
   }
 }
