@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.crenovert.friendlyeats.adapter.RestaurantAdapter
 import com.crenovert.friendlyeats.databinding.ActivityMainBinding
 import com.crenovert.friendlyeats.util.FirebaseUtil
+import com.crenovert.friendlyeats.util.RestaurantUtil.getRandom
 import com.crenovert.friendlyeats.viewmodel.MainActivityViewModel
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener,
     FilterDialogFragment.FilterListener, RestaurantAdapter.OnRestaurantSelectedListener {
@@ -114,8 +116,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun onAddItemsClicked() {
-        // TODO(developer): Add random restaurants
-        showTodoToast()
+        // Get a reference to the restaurants collection
+        val restaurants = mFirestore!!.collection("restaurants")
+        for (i in 0..9) {
+            // Get a random Restaurant POJO
+            val restaurant = getRandom(this)
+
+            // Add a new document to the restaurants collection
+            restaurants.add(restaurant)
+        }
     }
 
     override fun onFilter(filters: Filters) {
